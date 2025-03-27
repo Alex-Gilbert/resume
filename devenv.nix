@@ -1,45 +1,65 @@
 { pkgs, lib, config, inputs, ... }:
 
 {
-  # https://devenv.sh/basics/
-  env.GREET = "devenv";
+  packages = [
+    pkgs.git
+    (pkgs.texlive.combine {
+      inherit (pkgs.texlive)
+      # Base LaTeX installation
+        scheme-medium
 
-  # https://devenv.sh/packages/
-  packages = [ pkgs.git ];
+        # Build tool for LaTeX
+        latexmk
 
-  # https://devenv.sh/languages/
-  # languages.rust.enable = true;
+        # Required packages
+        fancyhdr titlesec enumitem hyperref marvosym babel tabulary fontawesome5
+        sourcesanspro multirow collection-fontsrecommended preprint geometry
+        ly1;
+    })
+    pkgs.evince
+    pkgs.poppler_utils
+    pkgs.entr
+    pkgs.inotify-tools
+  ];
 
-  # https://devenv.sh/processes/
-  # processes.cargo-watch.exec = "cargo-watch";
-
-  # https://devenv.sh/services/
-  # services.postgres.enable = true;
-
-  # https://devenv.sh/scripts/
-  scripts.hello.exec = ''
-    echo hello from $GREET
-  '';
-
+  # Shell configuration
   enterShell = ''
-    hello
-    git --version
+    echo "LaTeX Resume Environment"
+    echo "========================"
+    echo ""
+    echo "Available commands:"
+    echo "  build-resume   - Compile the resume to PDF"
+    echo "  clean          - Remove generated files"
+    echo "  view-resume    - Open the generated PDF"
+    echo "  live-edit      - Open the generated PDF and start live editing"
+    echo ""
   '';
 
-  # https://devenv.sh/tasks/
-  # tasks = {
-  #   "myproj:setup".exec = "mytool build";
-  #   "devenv:enterShell".after = [ "myproj:setup" ];
-  # };
-
-  # https://devenv.sh/tests/
-  enterTest = ''
-    echo "Running tests"
-    git --version | grep --color=auto "${pkgs.git.version}"
+  # Custom scripts
+  scripts.build-resume.exec = ''
+    echo "Building resume..."
+    mkdir -p build
+    latexmk -pdf -outdir=build resume.tex
+    echo "Resume built: resume.pdf"
   '';
 
-  # https://devenv.sh/git-hooks/
-  # git-hooks.hooks.shellcheck.enable = true;
+  scripts.clean.exec = ''
+    echo "Cleaning up generated files..."
+    rm -f build
+    echo "Done."
+  '';
 
-  # See full reference at https://devenv.sh/reference/options/
+  scripts.view-resume.exec = ''
+    if [ -f resume.pdf ]; then
+      echo "Opening resume.pdf..."
+      evince ./build/resume.pdf &
+    else
+      echo "Error: resume.pdf not found. Run 'build-resume' first."
+      exit 1
+    fi
+  '';
+
+  scripts.live-edit.exec = ''
+    ./scripts/resume-live-editing.sh
+  '';
 }

@@ -7,3 +7,9 @@ devenv.local.nix
 
 # pre-commit
 .pre-commit-config.yaml
+resume.aux
+resume.fdb_latexmk
+resume.fls
+resume.log
+resume.out
+resume.pdf
