@@ -4,7 +4,7 @@ This repository contains a professional LaTeX resume with a reproducible devenv 
 
 ## Prerequisites
 
-- [devenv](https://www.devenv.sh)
+- [devenv](https://devenv.sh)
 
 ## Quick Start
 
@@ -43,7 +43,7 @@ This repository contains a professional LaTeX resume with a reproducible devenv 
 
 Inside the development environment:
 
-- `build-resume` - Compile the LaTeX file to PDF
+- `build-resume` - Compile the LaTeX file to PDF (output is stored in the `build` directory)
 - `clean` - Remove generated files
 - `view-resume` - Open the generated PDF in a viewer
 - `live-edit` - Begin live editing
@@ -56,4 +56,4 @@ Inside the development environment:
 
 ## Live Editing
 
-Live editing can be started by invoking `live-edit` in the [devenv](https://www.devenv.sh) environment. Changes to `resume.tex` will result in the preview being updated live.
+Live editing can be started by invoking `live-edit` in the [devenv](https://devenv.sh) environment. Changes to `resume.tex` will result in the preview being updated live. This allows you to start the live-edit session and make edits to `resume.tex` in any external text editor you prefer.
